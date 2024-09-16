@@ -1,1 +1,245 @@
+local player = game.Players.LocalPlayer
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
 
+local Window = OrionLib:MakeWindow({Name = "NeZrut Hub (Da Hood)", HidePremium = false, SaveConfig = true, ConfigFolder = "NeZrutHub", IntroText = "NeZrut Hub"})
+
+--[[
+Name = <string> - The name of the UI.
+HidePremium = <bool> - Whether or not the user details shows Premium status or not.
+SaveConfig = <bool> - Toggles the config saving in the UI.
+ConfigFolder = <string> - The name of the folder where the configs are saved.
+IntroEnabled = <bool> - Whether or not to show the intro animation.
+IntroText = <string> - Text to show in the intro animation.
+IntroIcon = <string> - URL to the image you want to use in the intro animation.
+Icon = <string> - URL to the image you want displayed on the window.
+CloseCallback = <function> - Function to execute when the window is closed.
+]]
+
+local MainTab = Window:MakeTab({
+	Name = "Main",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+--[[
+Name = <string> - The name of the tab.
+Icon = <string> - The icon of the tab.
+PremiumOnly = <bool> - Makes the tab accessible to Sirus Premium users only.
+]]
+
+local Section = MainTab:AddSection({
+	Name = "Player"
+})
+
+--[[
+Name = <string> - The name of the section.
+]]
+
+OrionLib:MakeNotification({
+	Name = "Executed",
+	Content = "Script Is Fully Executed !",
+	Image = "rbxassetid://4483345998",
+	Time = 5
+})
+
+--[[
+Title = <string> - The title of the notification.
+Content = <string> - The content of the notification.
+Image = <string> - The icon of the notification.
+Time = <number> - The duration of the notfication.
+]]
+
+MainTab:AddButton({
+	Name = "Fly",
+	Callback = function()
+OrionLib:MakeNotification({
+	Name = "Fly",
+	Content = "Key X (If you die, reinject fly)",
+	Image = "rbxassetid://4483345998",
+	Time = 5
+})
+
+--[[
+Title = <string> - The title of the notification.
+Content = <string> - The content of the notification.
+Image = <string> - The icon of the notification.
+Time = <number> - The duration of the notfication.
+]]
+            
+--made by Unknwon User (NOT MADE BY CORYU)
+local plr = game.Players.LocalPlayer
+local mouse = plr:GetMouse()
+
+localplayer = plr
+
+if workspace:FindFirstChild("Core") then
+workspace.Core:Destroy()
+end
+
+local Core = Instance.new("Part")
+Core.Name = "Core"
+Core.Size = Vector3.new(0.05, 0.05, 0.05)
+
+spawn(function()
+Core.Parent = workspace
+local Weld = Instance.new("Weld", Core)
+Weld.Part0 = Core
+Weld.Part1 = localplayer.Character.LowerTorso
+Weld.C0 = CFrame.new(0, 0, 0)
+end)
+
+workspace:WaitForChild("Core")
+
+local torso = workspace.Core
+flying = true
+local speed=10
+local keys={a=false,d=false,w=false,s=false}
+local e1
+local e2
+local function start()
+local pos = Instance.new("BodyPosition",torso)
+local gyro = Instance.new("BodyGyro",torso)
+pos.Name="EPIXPOS"
+pos.maxForce = Vector3.new(math.huge, math.huge, math.huge)
+pos.position = torso.Position
+gyro.maxTorque = Vector3.new(9e9, 9e9, 9e9)
+gyro.cframe = torso.CFrame
+repeat
+wait()
+localplayer.Character.Humanoid.PlatformStand=true
+local new=gyro.cframe - gyro.cframe.p + pos.position
+if not keys.w and not keys.s and not keys.a and not keys.d then
+speed=5
+end
+if keys.w then
+new = new + workspace.CurrentCamera.CoordinateFrame.lookVector * speed
+speed=speed+0
+end
+if keys.s then
+new = new - workspace.CurrentCamera.CoordinateFrame.lookVector * speed
+speed=speed+0
+end
+if keys.d then
+new = new * CFrame.new(speed,0,0)
+speed=speed+0
+end
+if keys.a then
+new = new * CFrame.new(-speed,0,0)
+speed=speed+0
+end
+if speed>10 then
+speed=5
+end
+pos.position=new.p
+if keys.w then
+gyro.cframe = workspace.CurrentCamera.CoordinateFrame*CFrame.Angles(-math.rad(speed*0),0,0)
+elseif keys.s then
+gyro.cframe = workspace.CurrentCamera.CoordinateFrame*CFrame.Angles(math.rad(speed*0),0,0)
+else
+gyro.cframe = workspace.CurrentCamera.CoordinateFrame
+end
+until flying == false
+if gyro then gyro:Destroy() end
+if pos then pos:Destroy() end
+flying=false
+localplayer.Character.Humanoid.PlatformStand=false
+speed=10
+end
+e1=mouse.KeyDown:connect(function(key)
+if not torso or not torso.Parent then flying=false e1:disconnect() e2:disconnect() return end
+if key=="w" then
+keys.w=true
+elseif key=="s" then
+keys.s=true
+elseif key=="a" then
+keys.a=true
+elseif key=="d" then
+keys.d=true
+elseif key=="x" then
+if flying==true then
+flying=false
+else
+flying=true
+start()
+end
+end
+end)
+e2=mouse.KeyUp:connect(function(key)
+if key=="w" then
+keys.w=false
+elseif key=="s" then
+keys.s=false
+elseif key=="a" then
+keys.a=false
+elseif key=="d" then
+keys.d=false
+end
+end)
+start()
+  	end    
+})
+
+--[[
+Name = <string> - The name of the button.
+Callback = <function> - The function of the button.
+]]
+
+MainTab:AddButton({
+	Name = "Tp Tool",
+	Callback = function()
+mouse = game.Players.LocalPlayer:GetMouse()
+tool = Instance.new("Tool")
+tool.RequiresHandle = false
+tool.Name = "Click Teleport"
+tool.Activated:connect(function()
+local pos = mouse.Hit+Vector3.new(0,2.5,0)
+pos = CFrame.new(pos.X,pos.Y,pos.Z)
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = pos
+end)
+tool.Parent = game.Players.LocalPlayer.Backpack
+  	end    
+})
+
+--[[
+Name = <string> - The name of the button.
+Callback = <function> - The function of the button.
+]]
+
+MainTab:AddSlider({
+	Name = "WalkSpeed",
+	Min = 16,
+	Max = 500,
+	Default = 16,
+	Color = Color3.fromRGB(255,255,255),
+	Increment = 1,
+	ValueName = "Speed",
+	Callback = function(Value)
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = (Value)
+	end    
+})
+
+--[[
+Name = <string> - The name of the slider.
+Min = <number> - The minimal value of the slider.
+Max = <number> - The maxium value of the slider.
+Increment = <number> - How much the slider will change value when dragging.
+Default = <number> - The default value of the slider.
+ValueName = <string> - The text after the value number.
+Callback = <function> - The function of the slider.
+]]
+
+MainTab:AddBind({
+	Name = "Aimbot",
+	Default = Enum.KeyCode.E,
+	Hold = false,
+	Callback = function()
+		print("press")
+	end    
+})
+
+--[[
+Name = <string> - The name of the bind.
+Default = <keycode> - The default value of the bind.
+Hold = <bool> - Makes the bind work like: Holding the key > The bind returns true, Not holding the key > Bind returns false.
+Callback = <function> - The function of the bind.
+]]
