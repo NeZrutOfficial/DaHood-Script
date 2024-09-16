@@ -1,7 +1,7 @@
 local player = game.Players.LocalPlayer
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
 
-local Window = OrionLib:MakeWindow({Name = "NeZrut Hub (Da Hood)", HidePremium = false, SaveConfig = true, ConfigFolder = "NeZrutHub"})
+local Window = OrionLib:MakeWindow({Name = "NeZrut Hub (Da Hood)", HidePremium = false, SaveConfig = true, ConfigFolder = "NeZrutHub", IntroText = "NeZrut Hub"})
 
 --[[
 Name = <string> - The name of the UI.
